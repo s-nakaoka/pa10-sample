@@ -1,0 +1,80 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: degree
+name: gripper
+
+links:
+  -
+    name: BASE
+    jointType: free
+    mass: 0.24
+    centerOfMass: [ 0, 0, 1.3145 ]
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      -
+        type: Shape
+        rotation: [ 1, 0, 0, 90 ]
+        translation: [ 0, 0, 0.01 ]
+        geometry: { type: Cylinder, height: 0.01, radius: 0.03 }
+        appearance:
+          material: { diffuseColor: [ 0.85, 0.9, 0.85 ] }
+      -
+        type: DigitalIO
+        numSignalLines: 1
+        action:
+          input:
+            0: [ device, gripper, on ]
+        isOptional: true
+      -
+        type: Attachment
+        category: EndEffector
+        translation: [ 0, 0, -0.106 ]
+      -
+        type: Holder
+        name: gripper
+        translation: [ 0, 0, 0.106 ]
+  -
+    name: GRIPPER_L
+    parent: BASE
+    jointType: prismatic
+    jointAxis: [ 0, 1, 0 ]
+    jointId: 0
+    translation: [ 0, 0, 0 ]
+    jointRange: [ -0.03, 0.03 ]
+    jointVelocityRange: [ -1.0, 1.0 ]
+    mass: 0.5
+    inertia: [
+      0.1, 0, 0,
+      0, 0.1, 0,
+      0, 0, 0.1 ]
+    elements:
+      Visual: { resource: { uri: "parts/HAND_L.wrl" } }
+      Collision:
+        shape:
+          translation: [ 0, -0.005, 0.125 ]
+          geometry: &HAND_BOX
+            type: Box
+            size: [ 0.03, 0.01, 0.07 ]
+  -
+    name: GRIPPER_R
+    parent: BASE
+    jointType: prismatic
+    jointAxis: [ 0, 1, 0 ]
+    jointId: 1
+    translation: [ 0, 0, 0 ]
+    jointRange: [ -0.03, 0.03 ]
+    jointVelocityRange: [ -1.0, 1.0 ]
+    mass: 0.5
+    inertia: [
+      0.1, 0, 0,
+      0, 0.1, 0,
+      0, 0, 0.1 ]
+    elements:
+      Visual: { resource: { uri: "parts/HAND_R.wrl" } }
+      Collision:
+        shape:
+          translation: [ 0, 0.005, 0.125 ]
+          geometry: *HAND_BOX
