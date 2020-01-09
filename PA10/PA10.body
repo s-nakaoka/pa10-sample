@@ -22,7 +22,7 @@ links:
         translation: [ 0, 0, 0.1 ]
         geometry: { type: Cylinder, height: 0.2, radius: 0.115 }
         appearance: &APP1
-          material: { diffuseColor: [ 0.85, 0.9, 0.85 ] }
+          material: { diffuseColor: [ 0.7, 0.74, 0.7 ] }
   -
     name: J1
     parent: BASE
@@ -283,7 +283,7 @@ links:
     jointType: revolute
     jointAxis: [ 0, 0, 1 ]
     jointId: 6
-    translation: [ 0, 0, 0.08 ]
+    translation: [ 0, 0, 0.085 ]
     jointRange: [ -255, 255 ]
     jointVelocityRange: [ -180, 180 ]
     rotorInertia: 2.3E-6
@@ -296,22 +296,14 @@ links:
     elements:
       Shape:
         rotation: [ 1, 0, 0, 90 ]
-        translation: [ 0, 0, 0.01 ]
+        translation: [ 0, 0, 0.005 ]
         geometry: { type: Cylinder, height: 0.01, radius: 0.03 }
         appearance: *APP1
       Holder:
         category: EndEffector
+        translation: [ 0, 0, 0 ]
 
 standardPose: [ 0, 0, 0, 90, 0, 90, 0 ]
-
-linkGroup:
-  - BASE
-  - name: Arm
-    links: [ J1, J2, J3, J4, J5, J6, J7 ]
-
-possibleIkInterpolationLinks: [ J6, J7 ]
-defaultIkInterpolationLinks: [ J7 ]
-possileSupportLinks: [ ]
 
 defaultIKsetup:
   J6: [ BASE ]
@@ -320,10 +312,5 @@ defaultIKsetup:
 selfCollisionDetection:
   excludeTreeDepth: 2
   excludeLinks: [ ]
-
-bodyMarkers:
-  - [ BASE, [ 0.2, 0.2, 0.0 ], [ 0.2, -0.2, 0.0 ], [ -0.2, -0.2, 0.0 ], [ -0.2, 0.2, 0.0 ] ]
-  - J4
-  - J7
 
 bodyHandlers: PA10Handler

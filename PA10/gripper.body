@@ -17,10 +17,11 @@ links:
       -
         type: Shape
         rotation: [ 1, 0, 0, 90 ]
-        translation: [ 0, 0, 0.01 ]
-        geometry: { type: Cylinder, height: 0.01, radius: 0.03 }
-        appearance:
-          material: { diffuseColor: [ 0.85, 0.9, 0.85 ] }
+        translation: [ 0, 0, 0.0425 ]
+        geometry: { type: Cylinder, height: 0.085, radius: 0.038 }
+        appearance: &APP1
+          material:
+            diffuseColor: [ 0.6, 0.6, 0.6 ]
       -
         type: DigitalIO
         numSignalLines: 1
@@ -31,13 +32,13 @@ links:
       -
         type: Attachment
         category: EndEffector
-        translation: [ 0, 0, -0.106 ]
+        translation: [ 0, 0, 0 ]
       -
         type: Holder
         name: gripper
         translation: [ 0, 0, 0.106 ]
   -
-    name: GRIPPER_L
+    name: FINGER_L
     parent: BASE
     jointType: prismatic
     jointAxis: [ 0, 1, 0 ]
@@ -51,15 +52,16 @@ links:
       0, 0.1, 0,
       0, 0, 0.1 ]
     elements:
-      Visual: { resource: { uri: "parts/HAND_L.wrl" } }
-      Collision:
-        shape:
-          translation: [ 0, -0.005, 0.125 ]
-          geometry: &HAND_BOX
-            type: Box
-            size: [ 0.03, 0.01, 0.07 ]
+      Transform:
+        translation: [ 0, -0.005, 0.12 ]
+        elements: &GRIPPER
+          Shape:
+            geometry: &HAND_BOX
+              type: Box
+              size: [ 0.03, 0.01, 0.07 ]
+            appearance: *APP1
   -
-    name: GRIPPER_R
+    name: FINGER_R
     parent: BASE
     jointType: prismatic
     jointAxis: [ 0, 1, 0 ]
@@ -73,8 +75,6 @@ links:
       0, 0.1, 0,
       0, 0, 0.1 ]
     elements:
-      Visual: { resource: { uri: "parts/HAND_R.wrl" } }
-      Collision:
-        shape:
-          translation: [ 0, 0.005, 0.125 ]
-          geometry: *HAND_BOX
+      Transform:
+        translation: [ 0, 0.005, 0.12 ]
+        elements: *GRIPPER
