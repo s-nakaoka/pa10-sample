@@ -1,0 +1,33 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+name: wall
+links:
+  -
+    name: wall
+    jointType: fixed
+    elements:
+      -
+        type: Shape
+        translation: [ 0, 0, 0.8 ]
+        geometry: { type: Box, size: [ 0.05, 2.0, 1.6 ] }
+        appearance: { material: { diffuseColor: [ 1, 0.5, 0.1 ] }}
+      -
+        type: Transform
+        translation: [ 0.05, -0.2, 1.0 ]
+        elements: &Marker
+          Shape:
+            rotation: [ 0, 0, 1, 90 ]
+            geometry: { type: Cylinder, radius: 0.005, height: 0.001 }
+            appearance: { material: { diffuseColor: [ 0, 0, 0 ] }}
+      -
+        type: Transform
+        translation: [ 0.05, 0.2, 1.0 ]
+        elements: *Marker
+      -
+        type: Transform
+        translation: [ 0.05, -0.2, 0.7 ]
+        elements: *Marker
+      -
+        type: Transform
+        translation: [ 0.05, 0.2, 0.7 ]
+        elements: *Marker

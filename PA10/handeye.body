@@ -1,0 +1,74 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: degree
+name: handeye
+
+links:
+  -
+    name: BASE
+    jointType: free
+    mass: 0.24
+    centerOfMass: [ 0, 0, 1.3145 ]
+    inertia: [
+      0.1, 0,   0,
+      0,   0.1, 0,
+      0,   0,   0.1 ]
+    elements:
+      -
+        type: Attachment
+        category: EndEffector
+        translation: [ 0, 0, 0 ]
+      -
+        type: Shape
+        translation: [ 0, 0, 0.025 ]
+        geometry: { type: Box, size: [ 0.06, 0.06, 0.05 ] }
+        appearance: &APP1
+          material:
+            diffuseColor: [ 0.6, 0.6, 0.6 ]
+      -
+        type: Shape
+        translation: [ -0.033, 0, 0.06 ]
+        geometry: { type: Box, size: [ 0.005, 0.02, 0.08 ] }
+      -
+        type: Camera
+        name: Camera
+        rotation: [ [ 1, 0, 0, 180 ], [ 0, 0, 1, 90 ] ]
+        translation: [ -0.03, 0.0, 0.12 ]
+        format: COLOR
+        fieldOfView: 90.0
+        width: 1024
+        height: 768
+        frameRate: 30
+        elements:
+          -
+            type: Shape
+            rotation: [ 1, 0, 0, 90 ]
+            geometry: { type: Cylinder, radius: 0.006, height: 0.005 }
+            appearance:
+              material: { diffuseColor: [ 0, 0, 0 ] }
+          -
+            type: Shape
+            translation: [ 0, 0, 0.01 ]
+            geometry: { type: Box, size: [ 0.03, 0.03, 0.02 ] }
+            appearance:
+              material: { diffuseColor: [ 1.0, 0.2, 0.2 ] }
+            
+  -
+    name: DRIVER
+    parent: BASE
+    jointType: fixed
+    translation: [ 0, 0, 0.05 ]
+    mass: 0.5
+    inertia: [
+      0.1, 0, 0,
+      0, 0.1, 0,
+      0, 0, 0.1 ]
+    elements:
+      -
+        type: Shape
+        rotation: [ 1, 0, 0, 90 ]
+        translation: [ 0, 0, 0.04 ]
+        geometry: { type: Cylinder, height: 0.08, radius: 0.01 }
+        appearance: *APP1
+      -
+        type: ForceSensor

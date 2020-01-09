@@ -1,0 +1,12 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+name: floor
+links:
+  -
+    name: floor
+    translation: [ 0, 0, -0.05 ]
+    jointType: fixed
+    elements:
+      Shape:
+        geometry: { type: Box, size: [ 10.0, 10.0, 0.1 ] }
+        appearance: { material: { diffuseColor: [ 0.6, 0.6, 0.6 ] }}
