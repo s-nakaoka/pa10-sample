@@ -50,7 +50,7 @@ items:
               data: 
                 isNoDelayMode: false
                 controllerOptions: ""
-                controller: "PA10ScrewController.so"
+                controller: "PA10ScrewController"
                 baseDirectory: "Controller directory"
                 reloading: true
                 exportSymbols: false
