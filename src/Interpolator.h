@@ -2,8 +2,8 @@
    @author Shin'ichiro Nakaoka
 */
 
-#ifndef CNOID_UTIL_INTERPOLATOR_H_INCLUDED
-#define CNOID_UTIL_INTERPOLATOR_H_INCLUDED
+#ifndef CNOID_UTIL_INTERPOLATOR_H
+#define CNOID_UTIL_INTERPOLATOR_H
 
 #include <vector>
 #include <limits>
@@ -53,6 +53,10 @@ public:
 
     int numSamples() const {
         return samples.size();
+    }
+
+    bool empty() const {
+        return samples.empty();
     }
 
     double domainLower() const {
