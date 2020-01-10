@@ -17,31 +17,33 @@ const double dgain[] = {
     220.0, 220.0, 220.0, 220.0, 220.0, 220.0, 220.0,
     220.0, 220.0 };
 
+enum Phase {
+    REMAIN_STILL,
+    MOVE_TO_HOME_POSITION,
+    MOVE_FORWARD,
+    MOVE_BACK,
+    MOVE_TO_HOME_POSITION_AND_FINISH
+};
+
 }
 
 class PA10ScrewController : public SimpleController
 {
     Body* ioBody;
     BodyPtr ikBody;
-    Link* ikWrist;
     shared_ptr<JointPath> jointPath;
     VectorXd q_home;
-    ForceSensorPtr forceSensor;
     VectorXd qref, qold, qref_old;
     Interpolator<VectorXd> jointInterpolator;
     Interpolator<VectorXd> endInterpolator;
+    ForceSensorPtr forceSensor;
     int phase;
     double time;
     double timeStep;
-    double dq_hand;
+    double interpolationTime;
 
 public:
 
-    Vector3 toRadianVector3(double x, double y, double z)
-    {
-        return Vector3(radian(x), radian(y), radian(z));
-    }
-    
     virtual bool initialize(SimpleControllerIO* io) override
     {
         ioBody = io->body();
@@ -49,7 +51,6 @@ public:
         forceSensor = ioBody->findDevice<ForceSensor>();
         
         ikBody = ioBody->clone();
-        ikWrist = ikBody->link("J7");
         Link* baseLink = ikBody->rootLink();
         Link* endLink = ikBody->findUniqueEndLink();
         jointPath = JointPath::getCustomPath(ikBody, baseLink, endLink);
@@ -71,22 +72,52 @@ public:
         qref_old = qold;
 
         q_home.resize(nj);
-        q_home << 0.0, -58.7, 0.0, 112.0, 0.0, 36.3, 0.0;
+        q_home << 0.0, radian(-58.7), 0.0, radian(112.0), 0.0, radian(36.3), 0.0;
 
         jointInterpolator.clear();
         jointInterpolator.appendSample(0.0, qold);
-        jointInterpolator.appendSample(1.0, q_home);
+        jointInterpolator.appendSample(2.0, q_home);
         jointInterpolator.update();
-        
-        phase = 0;
+
+        phase = MOVE_TO_HOME_POSITION;
+
         time = 0.0;
         timeStep = io->timeStep();
+        interpolationTime = 0.0;
 
         return true;
     }
 
     virtual bool control() override
     {
+        bool isActive = false;
+
+        switch(phase){
+
+        case MOVE_TO_HOME_POSITION:
+        case MOVE_TO_HOME_POSITION_AND_FINISH:
+            qref = jointInterpolator.interpolate(interpolationTime);
+            interpolationTime += timeStep;
+            isActive = true;
+            if(interpolationTime >= jointInterpolator.domainUpper()){
+                if(phase == MOVE_TO_HOME_POSITION){
+                    phase = MOVE_FORWARD;
+                } else {
+                    phase = REMAIN_STILL;
+                }
+            }
+            break;
+
+        case MOVE_FORWARD:
+            break;
+
+        case MOVE_BACK:
+            break;
+
+        default:
+            break;
+        }
+            
         for(int i=0; i < ioBody->numJoints(); ++i){
             Link* joint = ioBody->joint(i);
             double q = joint->q();
@@ -95,8 +126,11 @@ public:
             joint->u() = (qref[i] - q) * pgain[i] + (dq_ref - dq) * dgain[i];
             qold[i] = q;
         }
+
+        qref_old = qref;
+        time += timeStep;
         
-        return true;
+        return isActive;
     }
 };
 

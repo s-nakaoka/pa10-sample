@@ -29,14 +29,14 @@ items:
               1, 0, 0, 
               0, 1, 0, 
               0, 0, 1 ]
-            jointDisplacements: [ -0.000000, -58.695997,  0.000000,  112.014622,  0.000000,  36.342800,  0.000000, -1.604911 ]
-            jointPositions: [ -0.000000, -1.024438,  0.000000,  1.955024,  0.000000,  0.634302,  0.000000, -0.028011 ]
+            jointDisplacements: [  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000 ]
+            jointPositions: [  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000 ]
             initialRootPosition: [ 0, 0, 0 ]
             initialRootAttitude: [ 
               1, 0, 0, 
               0, 1, 0, 
               0, 0, 1 ]
-            initialJointPositions: [ -0.000000, -1.024438,  0.000000,  1.955024,  0.000000,  0.634302,  0.000000, -0.028011 ]
+            initialJointPositions: [  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000,  0.000000 ]
             zmp: [ 0, 0, 0 ]
             collisionDetection: true
             selfCollisionDetection: false
@@ -324,18 +324,18 @@ views:
 toolbars: 
   "TimeBar": 
     minTime: 0
-    maxTime: 17.926
+    maxTime: 18.578
     frameRate: 1000
     playbackFrameRate: 60
     idleLoopDrivenMode: false
-    currentTime: 0
+    currentTime: 18.578
     speedScale: 1
     syncToOngoingUpdates: true
     autoExpansion: true
-  "BodyBar": 
-    current: 2
   "LeggedBodyBar": 
     stanceWidth: 0.15
+  "BodyBar": 
+    current: 2
   "KinematicsBar": 
     mode: AUTO
     enablePositionDragger: true
@@ -388,12 +388,12 @@ viewAreas:
     contents: 
       type: splitter
       orientation: horizontal
-      sizes: [ 259, 1101 ]
+      sizes: [ 301, 1282 ]
       children: 
         - 
           type: splitter
           orientation: vertical
-          sizes: [ 359, 358 ]
+          sizes: [ 458, 457 ]
           children: 
             - 
               type: pane
@@ -406,12 +406,12 @@ viewAreas:
         - 
           type: splitter
           orientation: vertical
-          sizes: [ 512, 205 ]
+          sizes: [ 653, 262 ]
           children: 
             - 
               type: splitter
               orientation: horizontal
-              sizes: [ 513, 582 ]
+              sizes: [ 598, 678 ]
               children: 
                 - 
                   type: pane
@@ -424,7 +424,7 @@ viewAreas:
             - 
               type: splitter
               orientation: horizontal
-              sizes: [ 548, 547 ]
+              sizes: [ 639, 637 ]
               children: 
                 - 
                   type: pane
