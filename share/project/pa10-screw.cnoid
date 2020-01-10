@@ -20,24 +20,23 @@ items:
           name: "PA10"
           plugin: Body
           class: BodyItem
-          isSelected: true
           isChecked: true
           data: 
-            modelFile: "${PROJECT_DIR}/PA10/PA10_handeye.body"
+            modelFile: "${SHARE}/pa10/model/PA10_handeye.body"
             currentBaseLink: ""
             rootPosition: [ 0, 0, 0 ]
             rootAttitude: [ 
               1, 0, 0, 
               0, 1, 0, 
               0, 0, 1 ]
-            jointDisplacements: [ -0.000000, -58.695997,  0.000000,  112.014622,  0.000000,  36.342800,  0.000000, -1.604911,  1.605391,  0.0000 ]
-            jointPositions: [ -0.000000, -1.024438,  0.000000,  1.955024,  0.000000,  0.634302,  0.000000, -0.028011,  0.028019,  0.000000 ]
+            jointDisplacements: [ -0.000000, -58.695997,  0.000000,  112.014622,  0.000000,  36.342800,  0.000000, -1.604911 ]
+            jointPositions: [ -0.000000, -1.024438,  0.000000,  1.955024,  0.000000,  0.634302,  0.000000, -0.028011 ]
             initialRootPosition: [ 0, 0, 0 ]
             initialRootAttitude: [ 
               1, 0, 0, 
               0, 1, 0, 
               0, 0, 1 ]
-            initialJointPositions: [ -0.000000, -1.024438,  0.000000,  1.955024,  0.000000,  0.634302,  0.000000, -0.028011,  0.028019,  0.000000 ]
+            initialJointPositions: [ -0.000000, -1.024438,  0.000000,  1.955024,  0.000000,  0.634302,  0.000000, -0.028011 ]
             zmp: [ 0, 0, 0 ]
             collisionDetection: true
             selfCollisionDetection: false
@@ -51,7 +50,7 @@ items:
               data: 
                 isNoDelayMode: false
                 controllerOptions: ""
-                controller: "PA10PickupController"
+                controller: "PA10ScrewController.so"
                 baseDirectory: "Controller directory"
                 reloading: true
                 exportSymbols: false
@@ -63,7 +62,7 @@ items:
           class: BodyItem
           isChecked: true
           data: 
-            modelFile: "${PROJECT_DIR}/floor.body"
+            modelFile: "${SHARE}/pa10/model/floor.body"
             currentBaseLink: ""
             rootPosition: [ 0, 0, -0.05 ]
             rootAttitude: [ 
@@ -87,7 +86,7 @@ items:
           class: BodyItem
           isChecked: true
           data: 
-            modelFile: "${PROJECT_DIR}/wall.body"
+            modelFile: "${SHARE}/pa10/model/wall.body"
             currentBaseLink: ""
             rootPosition: [ 0.6, 0, 0 ]
             rootAttitude: [ 
@@ -95,10 +94,10 @@ items:
               1.2246468e-16, -1, 0, 
               0, 0, 1 ]
             jointPositions: [  ]
-            initialRootPosition: [ 0, 0, 0 ]
+            initialRootPosition: [ 0.6, 0, 0 ]
             initialRootAttitude: [ 
-              1, 0, 0, 
-              0, 1, 0, 
+              -1, -1.2246468e-16, 0, 
+              1.2246468e-16, -1, 0, 
               0, 0, 1 ]
             zmp: [ 0, 0, 0 ]
             collisionDetection: true
@@ -198,9 +197,9 @@ views:
           fieldOfView: 0.6978
           near: 0.01
           far: 10000
-          eye: [ -0.972617184, 1.96002313, 1.1028444 ]
-          direction: [ 0.506051231, -0.845747886, -0.169182345 ]
-          up: [ 0.0868671441, -0.145178391, 0.985584768 ]
+          eye: [ -0.827677558, 2.08035164, 1.06010648 ]
+          direction: [ 0.438257331, -0.886340091, -0.149438129 ]
+          up: [ 0.0662361156, -0.1339572, 0.988771078 ]
         - 
           camera: [ System, Orthographic ]
           orthoHeight: 2.10799
@@ -213,13 +212,81 @@ views:
       isDedicatedItemCheckEnabled: false
   - 
     id: 4
+    name: "Handeye"
+    plugin: Base
+    class: SceneView
+    mounted: true
+    state: 
+      editMode: false
+      viewpointControlMode: thirdPerson
+      collisionLines: false
+      polygonMode: fill
+      restrictCameraRoll: true
+      verticalAxis: Z
+      lightingMode: full
+      cullingMode: enabled
+      defaultHeadLight: true
+      defaultHeadLightIntensity: 0.75
+      headLightLightingFromBack: false
+      worldLight: true
+      worldLightIntensity: 0.5
+      worldLightAmbient: 0.25
+      additionalLights: true
+      fog: true
+      floorGrid: true
+      floorGridSpan: 10
+      floorGridInterval: 0.5
+      xzGridSpan: 10
+      xzGridInterval: 0.5
+      xzGrid: false
+      yzGridSpan: 10
+      yzGridInterval: 0.5
+      texture: true
+      lineWidth: 1
+      pointSize: 1
+      normalVisualization: false
+      normalLength: 0.01
+      lightweightViewChange: false
+      coordinateAxes: true
+      fpsTestIteration: 1
+      upsideDown: false
+      cameras: 
+        - 
+          camera: [ System, Perspective ]
+          fieldOfView: 0.698132
+          near: 0.04
+          far: 200
+          eye: [ 4, 2, 1.5 ]
+          direction: [ -0.888888889, -0.444444444, -0.111111111 ]
+          up: [ -0.0993807989, -0.0496903995, 0.99380799 ]
+        - 
+          camera: [ System, Orthographic ]
+          orthoHeight: 20
+          near: 0.04
+          far: 200
+        - 
+          camera: [ PA10, HANDEYE_CAMERA ]
+          isCurrent: true
+      backgroundColor: [ 0.100000001, 0.100000001, 0.300000012 ]
+      gridColor: [ 0.899999976, 0.899999976, 0.899999976, 1 ]
+      xzgridColor: [ 0.899999976, 0.899999976, 0.899999976, 1 ]
+      yzgridColor: [ 0.899999976, 0.899999976, 0.899999976, 1 ]
+      isDedicatedItemCheckEnabled: false
+  - 
+    id: 5
     plugin: Body
     class: BodyLinkView
     mounted: true
     state: 
       showRotationMatrix: false
   - 
-    id: 5
+    id: 6
+    name: "Body State"
+    plugin: Body
+    class: BodyStateView
+    mounted: true
+  - 
+    id: 7
     plugin: Body
     class: JointDisplacementView
     mounted: true
@@ -232,7 +299,12 @@ views:
       showDials: false
       showPhases: false
   - 
-    id: 6
+    id: 8
+    name: "Joint State"
+    plugin: Body
+    class: JointStateView
+  - 
+    id: 9
     plugin: Body
     class: LinkSelectionView
     mounted: true
@@ -241,29 +313,29 @@ views:
       currentBodyItem: 2
       bodyItems: 
         - 
+          id: 2
+          selectedLinks: [ 9 ]
+        - 
           id: 4
           selectedLinks: [ 0 ]
         - 
           id: 5
           selectedLinks: [ 0 ]
-        - 
-          id: 2
-          selectedLinks: [ 8 ]
 toolbars: 
   "TimeBar": 
     minTime: 0
-    maxTime: 8
+    maxTime: 17.926
     frameRate: 1000
     playbackFrameRate: 60
     idleLoopDrivenMode: false
-    currentTime: 5.331
+    currentTime: 0
     speedScale: 1
     syncToOngoingUpdates: true
     autoExpansion: true
-  "LeggedBodyBar": 
-    stanceWidth: 0.15
   "BodyBar": 
     current: 2
+  "LeggedBodyBar": 
+    stanceWidth: 0.15
   "KinematicsBar": 
     mode: AUTO
     enablePositionDragger: true
@@ -277,7 +349,7 @@ Body:
     updateJointVelocities: false
   "BodySelectionManager": 
     currentBodyItem: 2
-    currentLink: "GRIPPER_BASE"
+    currentLink: "HANDEYE_DRIVER"
   "EditableSceneBody": 
     editableSceneBodies: 
       - 
@@ -316,12 +388,12 @@ viewAreas:
     contents: 
       type: splitter
       orientation: horizontal
-      sizes: [ 301, 1282 ]
+      sizes: [ 259, 1101 ]
       children: 
         - 
           type: splitter
           orientation: vertical
-          sizes: [ 455, 454 ]
+          sizes: [ 359, 358 ]
           children: 
             - 
               type: pane
@@ -329,30 +401,39 @@ viewAreas:
               current: 1
             - 
               type: pane
-              views: [ 0, 6 ]
+              views: [ 0, 9 ]
               current: 0
         - 
           type: splitter
           orientation: vertical
-          sizes: [ 649, 260 ]
+          sizes: [ 512, 205 ]
           children: 
             - 
               type: splitter
               orientation: horizontal
-              sizes: [ 598, 678 ]
+              sizes: [ 513, 582 ]
               children: 
                 - 
                   type: pane
-                  views: [ 5, 4 ]
+                  views: [ 7, 5, 4 ]
                   current: 4
                 - 
                   type: pane
                   views: [ 3 ]
                   current: 3
             - 
-              type: pane
-              views: [ 2 ]
-              current: 2
+              type: splitter
+              orientation: horizontal
+              sizes: [ 548, 547 ]
+              children: 
+                - 
+                  type: pane
+                  views: [ 2 ]
+                  current: 2
+                - 
+                  type: pane
+                  views: [ 6 ]
+                  current: 6
 layoutOfToolBars: 
   rows: 
     - 

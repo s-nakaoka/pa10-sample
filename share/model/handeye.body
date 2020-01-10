@@ -31,7 +31,7 @@ links:
         geometry: { type: Box, size: [ 0.005, 0.02, 0.08 ] }
       -
         type: Camera
-        name: Camera
+        name: CAMERA
         rotation: [ [ 1, 0, 0, 180 ], [ 0, 0, 1, 90 ] ]
         translation: [ -0.03, 0.0, 0.12 ]
         format: COLOR
@@ -72,3 +72,4 @@ links:
         appearance: *APP1
       -
         type: ForceSensor
+        name: FORCE_SENSOR
