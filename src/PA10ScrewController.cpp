@@ -1,11 +1,17 @@
+#include "Interpolator.h"
 #include <cnoid/SimpleController>
 #include <cnoid/JointPath>
 #include <cnoid/ForceSensor>
+#include <cnoid/Camera>
 #include <cnoid/EigenUtil>
-#include "Interpolator.h"
+#include <fmt/format.h>
+#include <mutex>
+#include <thread>
+#include <condition_variable>
 
 using namespace std;
 using namespace cnoid;
+using fmt::format;
 
 namespace {
 
@@ -42,6 +48,14 @@ class PA10ScrewController : public SimpleController
     Interpolator<VectorXd> jointInterpolator;
     Interpolator<VectorXd> endInterpolator;
     ForceSensorPtr forceSensor;
+    CameraPtr camera;
+    ScopedConnection cameraConnection;
+    shared_ptr<const Image> latestCameraImage;
+    std::mutex cameraImageMutex;
+    std::thread cameraImageThread;
+    std::condition_variable cameraImageCondition;
+    bool isCameraImageProcessingRequested;
+    bool isControllerStopped;
     int phase;
     double timeStep;
     double phaseTime;
@@ -83,6 +97,16 @@ public:
 
         forceSensor = ioBody->findDevice<ForceSensor>();
         io->enableInput(forceSensor);
+
+        camera = ioBody->findDevice<Camera>();
+        cameraConnection =
+            camera->sigStateChanged().connect(
+                [&](){ onCameraStateChanged(); });
+        latestCameraImage.reset();
+        io->enableInput(camera);
+        isCameraImageProcessingRequested = false;
+        isControllerStopped = false;
+        cameraImageThread = std::thread([&](){ processCameraImage(); });
         
         phase = MoveToHomePosition;
 
@@ -111,6 +135,7 @@ public:
             } else {
                 jointInterpolator.clear();
                 if(phase == MoveToHomePosition){
+                    requestCameraImageProcessing();
                     phase = InitializeMoveForward;
                 } else {
                     phase = Finish;
@@ -132,11 +157,7 @@ public:
             }
             
         case MoveForward:
-            if(forceSensor->f().z() < -20.0){
-                io->os() << "The end effector has touched to the wall." << endl;
-                phaseTime = 0.0;
-                phase = RemainStill;
-            } else {
+            if(forceSensor->f().z() > -20.0){
                 Position T = jointPath->endLink()->T();
                 if(vx < 0.4){
                     vx += 1.0 * timeStep;
@@ -149,6 +170,10 @@ public:
                         q_ref[i] = jointPath->joint(i)->q();
                     }
                 }
+            } else {
+                io->os() << "The end effector has touched to the wall." << endl;
+                phaseTime = 0.0;
+                phase = RemainStill;
             }
             break;
 
@@ -156,6 +181,7 @@ public:
             if(phaseTime <= 0.5){
                 phaseTime += timeStep;
             } else {
+                requestCameraImageProcessing();
                 phase = InitializeMoveBack;
             }
             break;
@@ -221,6 +247,58 @@ public:
         q_ref_old = q_ref;
         
         return isActive;
+    }
+
+    void stop()
+    {
+        if(cameraImageThread.joinable()){
+            {
+                std::lock_guard<std::mutex> lock(cameraImageMutex);
+                isControllerStopped = true;
+            }
+            cameraImageCondition.notify_all();
+            cameraImageThread.join();
+        }
+    }
+
+    void onCameraStateChanged()
+    {
+        std::lock_guard<std::mutex> lock(cameraImageMutex);
+        if(latestCameraImage != camera->sharedImage()){
+            latestCameraImage = camera->sharedImage();
+        }
+    }
+
+    void requestCameraImageProcessing()
+    {
+        {
+            std::lock_guard<std::mutex> lock(cameraImageMutex);
+            isCameraImageProcessingRequested = true;
+        }
+        cameraImageCondition.notify_all();
+    }
+
+    void processCameraImage()
+    {
+        int cameraImageCounter = 0;
+        while(true){
+            shared_ptr<const Image> cameraImage;
+            {
+                std::unique_lock<std::mutex> lock(cameraImageMutex);
+                cameraImageCondition.wait(
+                    lock, [&]{ return isCameraImageProcessingRequested || isControllerStopped; });
+                if(isControllerStopped){
+                    break;
+                }
+                cameraImage = latestCameraImage;
+                isCameraImageProcessingRequested = false;
+            }
+            if(cameraImage){
+                string filename = format("handeye{}.png", cameraImageCounter++);
+                cameraImage->save(filename);
+                io->os() << format("The current camera image has been saved to {}", filename) << endl;
+            }
+        }
     }
 };
 

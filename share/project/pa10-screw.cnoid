@@ -133,6 +133,25 @@ items:
             kinematicWalking: false
             2Dmode: false
             oldAccelSensorMode: false
+          children: 
+            - 
+              id: 7
+              name: "GLVisionSimulator"
+              plugin: Body
+              class: GLVisionSimulatorItem
+              data: 
+                enabled: true
+                maxFrameRate: 1000
+                maxLatency: 1
+                recordVisionData: false
+                threadMode: Sensor
+                bestEffort: false
+                allSceneObjects: false
+                rangeSensorPrecisionRatio: 2
+                depthError: 0
+                enableHeadLight: true
+                enableAdditionalLights: true
+                antiAliasing: false
 views: 
   - 
     id: 0
@@ -172,6 +191,8 @@ views:
       worldLightIntensity: 0.5
       worldLightAmbient: 0.3
       additionalLights: true
+      shadowLights: 
+        - 0
       fog: true
       floorGrid: false
       floorGridSpan: 10
@@ -328,7 +349,7 @@ toolbars:
     frameRate: 1000
     playbackFrameRate: 60
     idleLoopDrivenMode: false
-    currentTime: 18.578
+    currentTime: 0
     speedScale: 1
     syncToOngoingUpdates: true
     autoExpansion: true
@@ -438,11 +459,10 @@ layoutOfToolBars:
   rows: 
     - 
       - { name: "FileBar", x: 0, priority: 0 }
-      - { name: "ScriptBar", x: 54, priority: 0 }
-      - { name: "TimeBar", x: 108, priority: 0 }
-      - { name: "SceneBar", x: 1153, priority: 0 }
+      - { name: "ScriptBar", x: 54, priority: 1 }
+      - { name: "TimeBar", x: 108, priority: 2 }
     - 
-      - { name: "GraphBar", x: 0, priority: 0 }
-      - { name: "SimulationBar", x: 128, priority: 0 }
-      - { name: "BodyBar", x: 367, priority: 0 }
-      - { name: "KinematicsBar", x: 683, priority: 0 }
+      - { name: "SimulationBar", x: 0, priority: 0 }
+      - { name: "BodyBar", x: 239, priority: 1 }
+      - { name: "KinematicsBar", x: 555, priority: 2 }
+      - { name: "SceneBar", x: 838, priority: 3 }
